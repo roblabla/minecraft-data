@@ -1,5 +1,5 @@
 var rawVersion=getUrlParameter("v");
-var version=rawVersion ?  rawVersion : "feature-1.8-protocol_comments";
+var version=rawVersion ?  rawVersion : "70b13f233347ac4d80ac216964c08f403792331f";
 var rawActive=getUrlParameter("d");
 var active=rawActive ?  rawActive : "items";
 
