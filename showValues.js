@@ -95,31 +95,35 @@ function flatten(array, mutable) {
     return result;
 }
 
-function protocolToString(protocol)
+function protocolToString(protocol, comments)
 {
   return _('div#protocolActualTable')._(
     flatten(Object.keys(protocol).map(function (state) {
       return [_('h1').text(state),
-        directionsToString(state, protocol[state])];
+        directionsToString(state, protocol[state], comments[state])];
     }))
   ).H();
 }
 
-function directionsToString(state, directions)
+function directionsToString(state, directions, comments)
 {
-  return [_('h2').text('toClient'), directionToString(state, "toClient", directions["toClient"]),
-          _('h2').text('toServer'), directionToString(state, "toServer", directions["toServer"])];
+  return [_('h2').text('toClient'), directionToString(state, "toClient", directions["toClient"], comments["toClient"]),
+          _('h2').text('toServer'), directionToString(state, "toServer", directions["toServer"], comments["toServer"])];
 }
 
-function directionToString(state, direction, packets)
+function directionToString(state, direction, packets, comments)
 {
+  console.log(packets, comments);
   return Object.keys(packets).map(function(packetName){
-    return [
+    return flatten([
       _('h3#' + direction + '_' + packetName)._([
           _('a.glyphicon.glyphicon-link', { href: '#' + direction + '_' + packetName })
       ]).T(' ' + packetName),
-      packetToString(state, direction, packets[packetName])
-    ];
+      comments.hasOwnProperty(packetName) ? comments[packetName].mainContent.map(function(item) {
+        return _('p').T(item);
+      }) : [],
+      packetToString(state, direction, packets[packetName], comments[packetName])
+    ]);
   })
 }
 
@@ -335,9 +339,12 @@ function packetToString(state, direction, packet)
 function loadProtocol()
 {
   $j.ajax("https://cdn.rawgit.com/"+repo+"/"+version+"/enums/protocol.json")
-    .done(function(data){
-      $j('#protocolTable').html(protocolToString(data));
-    });
+    .done(function(protocol) {
+      $j.ajax("https://cdn.rawgit.com/"+repo+"/"+version+"/enums/protocol_comments.json")
+        .done(function(data){
+          $j('#protocolTable').html(protocolToString(protocol, data));
+        });
+    })
 }
 
 function loadData(enumName,elementToArray,fields,hiddenColumns)
