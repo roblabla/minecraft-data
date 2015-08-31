@@ -34,6 +34,11 @@
     <style>
         .tab-content { position:absolute; width: 95%; left:20px; }
         table#schemas,#schemas tr,#schemas th,#schemas td { border: 1px solid black;border-collapse: collapse;}
+        table#packets { width: auto; }
+        table#packets th, table#packets td {
+          text-align center;
+          vertical-align: inherit;
+        }
     </style>
 
 </head>
@@ -50,6 +55,7 @@
     <script src="./scroll.js"></script>
     <script src="./docson.js"></script>
     <script src="https://cdn.rawgit.com/skyzyx/dombuilder/1.3/dombuilder.min.js"></script>
+    <script src="./json-stable-stringify.js"></script>
     <script src="./showValues.js"></script>
 </body>
 </html>
